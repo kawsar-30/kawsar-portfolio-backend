@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/upload');
+const { protect, admin } = require('../middleware/auth.middleware')
 
 const {
   createCertification,
@@ -10,9 +11,9 @@ const {
   deleteCertification
 } = require('../controller/certification.controller');
 
-router.post('/', upload.array('media', 5), createCertification);
-router.put('/:id', upload.array('media', 5), updateCertification);
-router.delete('/:id', deleteCertification);
+router.post('/',protect, admin, upload.array('media', 5), createCertification);
+router.put('/:id',protect, admin, upload.array('media', 5), updateCertification);
+router.delete('/:id',protect, admin, deleteCertification);
 
 // 🔧🔥 ORDER MATTERS
 router.get('/', getAllCertifications);

@@ -28,6 +28,30 @@ app.use('/api/certifications', certificationRoutes);
 
 
 
+// Skills Route 
+const skillRoutes = require('./routes/skill.route');
+app.use('/api/skills', skillRoutes);
+
+
+
+// Service Route 
+const serviceRoutes = require('./routes/service.route');
+app.use('/api/services', serviceRoutes);
+
+
+
+// Message routes 
+const messageRoutes = require('./routes/message.route');
+app.use('/api/messages', messageRoutes); 
+
+// Visitor routes
+app.use('/api/visitors', require('./routes/visitor.route'));
+
+
+
+// Routes
+app.use('/api/auth', require('./routes/auth.route'));
+
 
 app.get('/', (req, res) => {
   res.status(200).json({

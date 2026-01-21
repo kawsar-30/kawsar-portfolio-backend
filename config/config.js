@@ -11,6 +11,13 @@ const config = {
     cloud_name: process.env.CLOUD_NAME,     // 🔧 FIX: must exist
     api_key: process.env.CLOUD_API_KEY,
     api_secret: process.env.CLOUD_API_SECRET,
+  },
+  email: {                       // ✅ Add this for NodeMailer
+    smtp_host: process.env.SMTP_HOST,
+    smtp_port: process.env.SMTP_PORT,
+    smtp_user: process.env.SMTP_USER,
+    smtp_pass: process.env.SMTP_PASS,
+    admin_email: process.env.ADMIN_EMAIL
   }
 };
 

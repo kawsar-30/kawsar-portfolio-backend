@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/upload');
+const { protect, admin } = require('../middleware/auth.middleware')
 
 const {
   createProject,
@@ -10,9 +11,9 @@ const {
   deleteProject
 } = require('../controller/project.controller');
 
-router.post('/', upload.array('media', 10), createProject);
-router.put('/:id', upload.array('media', 10), updateProject);
-router.delete('/:id', deleteProject);
+router.post('/',protect,admin, upload.array('media', 10), createProject);
+router.put('/:id',protect,admin, upload.array('media', 10), updateProject);
+router.delete('/:id',protect,admin, deleteProject);
 router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
 
