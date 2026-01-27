@@ -45,20 +45,28 @@ exports.getMessageById = async (req,res,next) => {
   }
 }
 
-// UPDATE MESSAGE (e.g., mark as read)
-exports.updateMessage = async (req,res,next) => {
-  try{
-    const message = await Message.findById(req.params.id);
-    if(!message) return res.status(404).json({ success:false, message:'Message not found' });
 
-    message.status = req.body.status || message.status;
-    await message.save();
-    res.json({ success:true, data: message });
-  }catch(err){
+// UPDATE MESSAGE (Backend Controller)
+exports.updateMessage = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // সরাসরি ডাটাবেসে status ফিল্ড 'read' করে দিচ্ছি
+    const updatedMessage = await Message.findByIdAndUpdate(
+      id,
+      { $set: { status: 'read' } }, 
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedMessage) {
+      return res.status(404).json({ success: false, message: 'Message not found' });
+    }
+
+    res.json({ success: true, data: updatedMessage });
+  } catch (err) {
     next(err);
   }
-}
-
+};
 // DELETE MESSAGE
 exports.deleteMessage = async (req,res,next) => {
   try{

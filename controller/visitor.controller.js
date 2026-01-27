@@ -5,21 +5,29 @@ exports.trackVisitor = async (req, res, next) => {
   try {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'] || 'Unknown';
-    const path = req.body.path || '/';
+    const currentPath = req.body.path || '/';
 
-    // Find existing visitor for same IP + device + path
-    let visitor = await Visitor.findOne({ ip, userAgent, path });
+    // IP + UserAgent দিয়ে ইউজারকে খুঁজে বের করা
+    let visitor = await Visitor.findOne({ ip, userAgent });
 
-    if(visitor){
+    if (visitor) {
+      // যদি ইউজার আগে এসে থাকে:
       visitor.visits += 1;
       visitor.lastVisited = Date.now();
+      // নতুন পাথটি হিস্টোরিতে যোগ করা (যদি আগের পাথের চেয়ে আলাদা হয় বা সব পাথই রাখতে চাও)
+      visitor.visitedPaths.push({ path: currentPath });
       await visitor.save();
     } else {
-      visitor = await Visitor.create({ ip, userAgent, path });
+      // একদম নতুন ইউজার হলে:
+      visitor = await Visitor.create({ 
+        ip, 
+        userAgent, 
+        visitedPaths: [{ path: currentPath }] 
+      });
     }
 
     res.status(201).json({ success: true, data: visitor });
-  } catch(err){
+  } catch (err) {
     next(err);
   }
 };

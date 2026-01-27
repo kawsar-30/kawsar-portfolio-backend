@@ -25,8 +25,9 @@ const User = require('../model/user.model');
 
 // Protect route - verify logged-in user
 const protect = async (req, res, next) => {
-  let token;
+ let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    // split করে ১ নম্বর ইনডেক্স থেকে টোকেন নেওয়া
     token = req.headers.authorization.split(' ')[1];
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
