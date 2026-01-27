@@ -51,7 +51,7 @@ exports.updateMessage = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // সরাসরি ডাটাবেসে status ফিল্ড 'read' করে দিচ্ছি
+   
     const updatedMessage = await Message.findByIdAndUpdate(
       id,
       { $set: { status: 'read' } }, 

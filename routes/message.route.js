@@ -10,10 +10,8 @@ const {
   deleteMessage
 } = require('../controller/message.controller');
 
-// Public route: send message
-router.post('/', createMessage);
 
-// Admin routes: manage messages
+router.post('/', createMessage);
 router.get('/',protect,admin, getAllMessages);
 router.get('/:id',protect,admin, getMessageById);
 router.put('/:id',protect,admin, updateMessage);

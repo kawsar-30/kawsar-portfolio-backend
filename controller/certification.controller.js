@@ -13,7 +13,7 @@ exports.createCertification = async (req, res, next) => {
       });
     }
 
-    // 🔧🔥 FIX boolean handling
+
     const featuredValue =
       featured === 'true' || featured === true ? true : false;
 
@@ -31,7 +31,7 @@ exports.createCertification = async (req, res, next) => {
       issuer,
       issueDate,
       credentialUrl,
-      featured: featuredValue, // 🔥 FIX
+      featured: featuredValue, // 
       media: mediaFiles
     });
 

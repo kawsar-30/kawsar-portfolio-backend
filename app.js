@@ -73,39 +73,3 @@ module.exports = app;
 
 
 
-// const express = require('express');
-// const cors = require('cors');
-// const morgan = require('morgan');
-// require('dotenv').config(); 
-
-
-// const app= express() 
-
-
-// // Middlewares
-// app.use(cors()); 
-
-
-
-
-
-
-
-
-// // Error handling middleware
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).json({
-//     success: false,
-//     message: err.message || 'Internal Server Error'
-//   });
-// });
-
-
-// // Health check
-// app.get('/', (req, res) => {
-//   res.send('✅ Project API is working');
-// });
-
-
-// module.exports=app;

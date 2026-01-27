@@ -14,7 +14,7 @@ const uploadMedia = async (file, folder = 'projects') => {
     cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: 'auto', // 🔧 FIX: auto handles image/video/pdf correctly
+        resource_type: 'auto', 
       },
       (error, result) => {
         if (error) return reject(error);

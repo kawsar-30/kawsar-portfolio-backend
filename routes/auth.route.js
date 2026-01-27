@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { register, login, getAllAdmins, deleteAdmin, resetPassword } = require('../controller/auth.controller');
 
-// Admin registration (optional)
+
 router.post('/register', register);
 
-// Admin login
+
 router.post('/login', login); 
 
 router.get('/admins', getAllAdmins);

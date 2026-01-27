@@ -17,29 +17,3 @@ connectDB()
     console.error('❌ DB connection failed:', err);
     process.exit(1);
   });
-
-
-
-// require('dotenv').config();
-// const connectDB = require('./config/db');
-// const app = require('./app'); 
-
-
-
-
-// // Connect to DB
-// connectDB()
-//   .then(() => {
-//     console.log("✅ Database connected successfully");
-//   })
-//   .catch((err) => {
-//     console.error("❌ DB connection failed:", err);
-//     process.exit(1);
-//   }); 
-
-
-
-
-
-
-//   module.exports = app;

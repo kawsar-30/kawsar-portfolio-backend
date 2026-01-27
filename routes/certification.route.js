@@ -15,7 +15,6 @@ router.post('/',protect, admin, upload.array('media', 5), createCertification);
 router.put('/:id',protect, admin, upload.array('media', 5), updateCertification);
 router.delete('/:id',protect, admin, deleteCertification);
 
-// 🔧🔥 ORDER MATTERS
 router.get('/', getAllCertifications);
 router.get('/:id', getCertificationById);
 
