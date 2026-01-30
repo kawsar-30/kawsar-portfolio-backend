@@ -6,7 +6,10 @@ require('dotenv').config();
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  credentials: true
+}));
 app.use(express.json()); // JSON body parser
 app.use(morgan('dev')); // request logger
 
