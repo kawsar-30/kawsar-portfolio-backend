@@ -2,14 +2,15 @@ const Service = require('../model/service.model');
 const { uploadMedia } = require('../service/cloudinary.service');
 
 // CREATE SERVICE
-exports.createService = async (req,res,next) => {
-  try{
+exports.createService = async (req, res, next) => {
+  try {
     const { title, description, category, featured } = req.body;
     const mediaFiles = [];
 
-    if(req.files && req.files.length > 0){
-      for(const file of req.files){
-        const uploaded = await uploadMedia(file);
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        // 🔥 FIX: Passed 'services' folder name
+        const uploaded = await uploadMedia(file, 'services');
         mediaFiles.push(uploaded);
       }
     }
@@ -18,15 +19,16 @@ exports.createService = async (req,res,next) => {
       title,
       description,
       category,
-      featured,
+      featured: String(featured) === 'true', // 🔥 Boolean Fix
       media: mediaFiles
     });
 
     res.status(201).json({ success: true, data: service });
-  }catch(err){
+  } catch (err) {
     next(err);
   }
-}
+};
+
 
 // GET ALL SERVICES
 exports.getAllServices = async (req,res,next) => {
@@ -55,38 +57,34 @@ exports.updateService = async (req, res, next) => {
     const service = await Service.findById(req.params.id);
     if (!service) return res.status(404).json({ success: false, message: 'Service not found' });
 
-    // Handle Media: Jodi notun file thake sheta use hobe, nahole agerটাই thakbe
-    let mediaFiles = service.media; 
+    let mediaFiles = service.media;
+
     if (req.files && req.files.length > 0) {
       const uploadedFiles = [];
       for (const file of req.files) {
-        const uploaded = await uploadMedia(file);
+        // 🔥 FIX: Ensure upload to 'services' folder
+        const uploaded = await uploadMedia(file, 'services');
         uploadedFiles.push(uploaded);
       }
-      mediaFiles = uploadedFiles; // Old media replaced by new one
-    } else if (req.body.media) {
-      // Manual object pass korle sheta update hobe
-      mediaFiles = Array.isArray(req.body.media) ? req.body.media : [req.body.media];
+      mediaFiles = uploadedFiles; // Old icon replace hobe
     }
 
-    // Explicitly update fields
     service.title = req.body.title || service.title;
     service.description = req.body.description || service.description;
     service.category = req.body.category || service.category;
-
-    // Featured Fix: Frontend theke asha string/boolean ke properly handle kora
+    
     if (req.body.featured !== undefined) {
       service.featured = String(req.body.featured) === 'true';
     }
 
     service.media = mediaFiles;
+    await service.save();
 
-    const updatedService = await service.save();
-    res.json({ success: true, data: updatedService });
+    res.json({ success: true, data: service });
   } catch (err) {
     next(err);
   }
-}
+};
 
 // DELETE SERVICE
 exports.deleteService = async (req,res,next) => {
