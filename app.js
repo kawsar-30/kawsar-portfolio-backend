@@ -7,7 +7,7 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: '*',
+  origin: 'https://kawsarhossain30.vercel.app',
   credentials: true
 }));
 app.use(express.json()); // JSON body parser
