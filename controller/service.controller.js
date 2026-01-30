@@ -50,29 +50,40 @@ exports.getServiceById = async (req,res,next) => {
 }
 
 // UPDATE SERVICE
-exports.updateService = async (req,res,next) => {
-  try{
+exports.updateService = async (req, res, next) => {
+  try {
     const service = await Service.findById(req.params.id);
-    if(!service) return res.status(404).json({ success:false, message:'Service not found' });
+    if (!service) return res.status(404).json({ success: false, message: 'Service not found' });
 
-    const mediaFiles = service.media;
-
-    if(req.files && req.files.length > 0){
-      for(const file of req.files){
+    // Handle Media: Jodi notun file thake sheta use hobe, nahole agerটাই thakbe
+    let mediaFiles = service.media; 
+    if (req.files && req.files.length > 0) {
+      const uploadedFiles = [];
+      for (const file of req.files) {
         const uploaded = await uploadMedia(file);
-        mediaFiles.push(uploaded);
+        uploadedFiles.push(uploaded);
       }
+      mediaFiles = uploadedFiles; // Old media replaced by new one
+    } else if (req.body.media) {
+      // Manual object pass korle sheta update hobe
+      mediaFiles = Array.isArray(req.body.media) ? req.body.media : [req.body.media];
     }
 
+    // Explicitly update fields
     service.title = req.body.title || service.title;
     service.description = req.body.description || service.description;
     service.category = req.body.category || service.category;
-    service.featured = req.body.featured ?? service.featured;
+
+    // Featured Fix: Frontend theke asha string/boolean ke properly handle kora
+    if (req.body.featured !== undefined) {
+      service.featured = String(req.body.featured) === 'true';
+    }
+
     service.media = mediaFiles;
 
-    await service.save();
-    res.json({ success:true, data: service });
-  }catch(err){
+    const updatedService = await service.save();
+    res.json({ success: true, data: updatedService });
+  } catch (err) {
     next(err);
   }
 }
